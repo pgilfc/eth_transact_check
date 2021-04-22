@@ -8,13 +8,13 @@
   </li>
 
   <li>
-    <strong>Status:</strong>
-    <%= @transaction.status %>
+    <strong>Block number:</strong>
+    <%= @transaction.block_number %>
   </li>
 
   <li>
-    <strong>Block number:</strong>
-    <%= @transaction.block_number %>
+    <strong>Status:</strong>
+    <%= @transaction.status %>
   </li>
 
   <li>

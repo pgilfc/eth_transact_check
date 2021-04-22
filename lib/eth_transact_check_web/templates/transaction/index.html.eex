@@ -4,8 +4,8 @@
   <thead>
     <tr>
       <th>Hash</th>
-      <th>Status</th>
       <th>Block number</th>
+      <th>Status</th>
       <th>Is complete</th>
 
       <th></th>
@@ -15,8 +15,8 @@
 <%= for transaction <- @transactions do %>
     <tr>
       <td><%= transaction.hash %></td>
-      <td><%= transaction.status %></td>
       <td><%= transaction.block_number %></td>
+      <td><%= transaction.status %></td>
       <td><%= transaction.is_complete %></td>
 
       <td>
