@@ -17,7 +17,10 @@ defmodule EthTransactCheckWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/transactions", TransactionController
+    get "/transactions", TransactionController, :index
+    get "/transactions/new", TransactionController, :new
+    get "/transactions/:id", TransactionController, :show
+    post "/transactions", TransactionController, :create
   end
 
   # Other scopes may use custom stacks.

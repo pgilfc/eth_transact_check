@@ -4,7 +4,6 @@ defmodule EthTransactCheckWeb.TransactionControllerTest do
   alias EthTransactCheck.Transactions
 
   @create_attrs %{block_number: 42, hash: "some hash", is_complete: true, status: true}
-  @update_attrs %{block_number: 43, hash: "some updated hash", is_complete: false, status: false}
   @invalid_attrs %{block_number: nil, hash: nil, is_complete: nil, status: nil}
 
   def fixture(:transaction) do
@@ -43,46 +42,4 @@ defmodule EthTransactCheckWeb.TransactionControllerTest do
     end
   end
 
-  describe "edit transaction" do
-    setup [:create_transaction]
-
-    test "renders form for editing chosen transaction", %{conn: conn, transaction: transaction} do
-      conn = get(conn, Routes.transaction_path(conn, :edit, transaction))
-      assert html_response(conn, 200) =~ "Edit Transaction"
-    end
-  end
-
-  describe "update transaction" do
-    setup [:create_transaction]
-
-    test "redirects when data is valid", %{conn: conn, transaction: transaction} do
-      conn = put(conn, Routes.transaction_path(conn, :update, transaction), transaction: @update_attrs)
-      assert redirected_to(conn) == Routes.transaction_path(conn, :show, transaction)
-
-      conn = get(conn, Routes.transaction_path(conn, :show, transaction))
-      assert html_response(conn, 200) =~ "some updated hash"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn, transaction: transaction} do
-      conn = put(conn, Routes.transaction_path(conn, :update, transaction), transaction: @invalid_attrs)
-      assert html_response(conn, 200) =~ "Edit Transaction"
-    end
-  end
-
-  describe "delete transaction" do
-    setup [:create_transaction]
-
-    test "deletes chosen transaction", %{conn: conn, transaction: transaction} do
-      conn = delete(conn, Routes.transaction_path(conn, :delete, transaction))
-      assert redirected_to(conn) == Routes.transaction_path(conn, :index)
-      assert_error_sent 404, fn ->
-        get(conn, Routes.transaction_path(conn, :show, transaction))
-      end
-    end
-  end
-
-  defp create_transaction(_) do
-    transaction = fixture(:transaction)
-    %{transaction: transaction}
-  end
 end
