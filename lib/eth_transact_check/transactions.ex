@@ -50,8 +50,8 @@ defmodule EthTransactCheck.Transactions do
 
   """
   def create_transaction(attrs \\ %{}) do
-    %Transaction{}
-    |> Transaction.changeset(attrs)
+    %Transaction{status: false, is_complete: false}
+    |> Transaction.create_changeset(attrs)
     |> Repo.insert()
   end
 

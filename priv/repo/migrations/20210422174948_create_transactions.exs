@@ -11,5 +11,6 @@ defmodule EthTransactCheck.Repo.Migrations.CreateTransactions do
       timestamps()
     end
 
+    create unique_index(:transactions, [:hash])
   end
 end

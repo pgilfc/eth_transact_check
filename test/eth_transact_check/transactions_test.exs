@@ -6,9 +6,9 @@ defmodule EthTransactCheck.TransactionsTest do
   describe "transactions" do
     alias EthTransactCheck.Transactions.Transaction
 
-    @valid_attrs %{block_number: 42, hash: "some hash", is_complete: true, status: true}
-    @update_attrs %{block_number: 43, hash: "some updated hash", is_complete: false, status: false}
-    @invalid_attrs %{block_number: nil, hash: nil, is_complete: nil, status: nil}
+    @valid_attrs  %{block_number: nil, hash: "0x856a8ed99754fd8948b3ad60ed2b381401ddbcb34d754803d8136c4ae4315cf7", is_complete: false, status: false}
+    @update_attrs %{block_number: 43, hash: "0x856a8ed99754fd8948b3ad60ed2b381401ddbcb34d754803d8136c4ae4315cf7", is_complete: true, status: true}
+    @invalid_attrs %{block_number: nil, hash: "0x856a8ed99754fd8948b3ad60ed2b381401ddbcb34d754803d8136c4ae4315c", is_complete: false, status: false}
 
     def transaction_fixture(attrs \\ %{}) do
       {:ok, transaction} =
@@ -31,10 +31,10 @@ defmodule EthTransactCheck.TransactionsTest do
 
     test "create_transaction/1 with valid data creates a transaction" do
       assert {:ok, %Transaction{} = transaction} = Transactions.create_transaction(@valid_attrs)
-      assert transaction.block_number == 42
-      assert transaction.hash == "some hash"
-      assert transaction.is_complete == true
-      assert transaction.status == true
+      assert transaction.block_number == nil
+      assert transaction.hash == "0x856a8ed99754fd8948b3ad60ed2b381401ddbcb34d754803d8136c4ae4315cf7"
+      assert transaction.is_complete == false
+      assert transaction.status == false
     end
 
     test "create_transaction/1 with invalid data returns error changeset" do
@@ -45,15 +45,9 @@ defmodule EthTransactCheck.TransactionsTest do
       transaction = transaction_fixture()
       assert {:ok, %Transaction{} = transaction} = Transactions.update_transaction(transaction, @update_attrs)
       assert transaction.block_number == 43
-      assert transaction.hash == "some updated hash"
-      assert transaction.is_complete == false
-      assert transaction.status == false
-    end
-
-    test "update_transaction/2 with invalid data returns error changeset" do
-      transaction = transaction_fixture()
-      assert {:error, %Ecto.Changeset{}} = Transactions.update_transaction(transaction, @invalid_attrs)
-      assert transaction == Transactions.get_transaction!(transaction.id)
+      assert transaction.hash == @valid_attrs.hash
+      assert transaction.is_complete == true
+      assert transaction.status == true
     end
 
     test "delete_transaction/1 deletes the transaction" do

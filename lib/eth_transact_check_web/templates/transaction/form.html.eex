@@ -9,18 +9,6 @@
   <%= text_input f, :hash %>
   <%= error_tag f, :hash %>
 
-  <%= label f, :status %>
-  <%= checkbox f, :status %>
-  <%= error_tag f, :status %>
-
-  <%= label f, :block_number %>
-  <%= number_input f, :block_number %>
-  <%= error_tag f, :block_number %>
-
-  <%= label f, :is_complete %>
-  <%= checkbox f, :is_complete %>
-  <%= error_tag f, :is_complete %>
-
   <div>
     <%= submit "Save" %>
   </div>

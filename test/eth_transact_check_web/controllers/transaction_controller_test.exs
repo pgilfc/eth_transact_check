@@ -3,8 +3,8 @@ defmodule EthTransactCheckWeb.TransactionControllerTest do
 
   alias EthTransactCheck.Transactions
 
-  @create_attrs %{block_number: 42, hash: "some hash", is_complete: true, status: true}
-  @invalid_attrs %{block_number: nil, hash: nil, is_complete: nil, status: nil}
+  @create_attrs %{block_number: nil, hash: "0x856a8ed99754fd8948b3ad60ed2b381401ddbcb34d754803d8136c4ae4315cf7", is_complete: false, status: false}
+  @invalid_attrs %{block_number: nil, hash: "0x856a8ed99754fd8948b3ad60ed2b381401ddbcb34d754803d8136c4ae4315cf", is_complete: false, status: false}
 
   def fixture(:transaction) do
     {:ok, transaction} = Transactions.create_transaction(@create_attrs)
