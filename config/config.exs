@@ -26,6 +26,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+api_key = System.get_env("API_KEY") || raise "environment variable API_KEY is missing."
+config :eth_transact_check, EthTransactCheck.EthRequests,
+  api_key: api_key
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
