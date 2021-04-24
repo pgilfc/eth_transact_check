@@ -26,14 +26,34 @@ defmodule EthTransactCheck.EthRequests do
     |> case do
       {:ok, %HTTPoison.Response{status_code: 200, body: body }} ->
         case Jason.decode!(body) do
-          %{"jsonrpc" => @jsonrpc, "result" => block_number}  ->
-            {:ok, block_number}
+          %{"jsonrpc" => @jsonrpc, "result" => transaction_receipt}  ->
+            {:ok, transaction_receipt}
           _ ->
             {:error, body}
         end
       _ ->
         {:error, "eth_get_transaction_receipt couldn't connect"}
     end
+  end
+
+  def eth_get_transaction_details(hash) do
+    eth_get_transaction_receipt(hash)
+    |> case do
+      {:ok, %{"blockNumber" => block_number, "status" => status}} ->
+        {:ok, %{block_number: parse_block_number(block_number), status: receipt_status(status)}}
+      {:error, body} ->
+        {:error, body}
+    end
+  end
+
+
+  defp receipt_status("0x1"), do: true
+  defp receipt_status("0x0"), do: false
+
+  defp parse_block_number("0x" <> blockNumber) do
+    {intVal, ""} = blockNumber
+      |> Integer.parse(16)
+    intVal
   end
 
 end
