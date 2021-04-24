@@ -17,6 +17,16 @@ defmodule EthTransactCheck.EthRequestsTest do
       assert {:error, _error_message} = EthRequests.eth_get_transaction_receipt(@invalid_hash)
     end
 
+    test "eth_get_transaction_receipt/1 testing api timeout" do
+      Process.sleep(1000)
+      assert {:ok, %{"status"=> _status, "blockNumber"=> _block}} = EthRequests.eth_get_transaction_receipt(@valid_hash)
+      assert {:ok, %{"status"=> _status, "blockNumber"=> _block}} = EthRequests.eth_get_transaction_receipt(@valid_hash)
+      assert {:ok, %{"status"=> _status, "blockNumber"=> _block}} = EthRequests.eth_get_transaction_receipt(@valid_hash)
+      assert {:ok, %{"status"=> _status, "blockNumber"=> _block}} = EthRequests.eth_get_transaction_receipt(@valid_hash)
+      assert {:ok, %{"status"=> _status, "blockNumber"=> _block}} = EthRequests.eth_get_transaction_receipt(@valid_hash)
+      assert {:error, _error_message} = EthRequests.eth_get_transaction_receipt(@valid_hash)
+    end
+
   end
 
 end
