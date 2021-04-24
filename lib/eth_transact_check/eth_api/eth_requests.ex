@@ -1,5 +1,7 @@
 defmodule EthTransactCheck.EthRequests do
 
+  alias EthTransactCheck.EthRequestsRate
+
   @jsonrpc "2.0"
   @api_key Application.fetch_env!(:eth_transact_check, EthTransactCheck.EthRequests)[:api_key]
   @url "https://api.etherscan.io/api"
@@ -45,7 +47,6 @@ defmodule EthTransactCheck.EthRequests do
         {:error, body}
     end
   end
-
 
   defp receipt_status("0x1"), do: true
   defp receipt_status("0x0"), do: false

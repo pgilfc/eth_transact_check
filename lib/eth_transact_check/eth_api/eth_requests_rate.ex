@@ -1,0 +1,82 @@
+defmodule EthTransactCheck.EthRequestsRate do
+  @moduledoc """
+  GenServer to controll api rate
+  """
+  use GenServer
+
+  @calls 5
+
+  def seconds, do: System.system_time(:second)
+
+  def wait_until(time) do
+    if seconds() < time do
+      Process.sleep(100)
+      wait_until(time)
+    end
+  end
+
+  ### CLIENT API ###
+
+  @doc """
+  Starts registry
+  """
+  def start_link do
+    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+  end
+
+  @doc """
+  Stop registry
+  """
+  def stop do
+    GenServer.stop(__MODULE__)
+  end
+
+  @doc """
+  Read api calls
+  """
+  def read do
+    GenServer.call(__MODULE__, :read)
+  end
+
+  @doc """
+  Decrease api count
+  """
+  def count do
+    GenServer.cast(__MODULE__, {:count})
+    GenServer.call(__MODULE__, :read)
+  end
+
+
+  ### SERVER CALLBACKS ###
+
+  def init(:ok) do
+    {:ok, {seconds(), @calls}}
+  end
+
+  @doc """
+  Returns current api info
+  """
+  def handle_call(:read, _from, store) do
+    {:reply, store, store}
+  end
+
+  @doc """
+  Calculates current api state
+  """
+  def handle_cast({:count}, {time, 0}) do
+    wait_until(time + 1)
+    current_time = seconds()
+    {:noreply, {current_time, @calls - 1}}
+  end
+
+  def handle_cast({:count}, {time, calls}) do
+    cond do
+      time < seconds() ->
+        current_time = seconds()
+        {:noreply, {current_time, @calls - 1}}
+      true ->
+        {:noreply, {time, calls - 1}}
+    end
+  end
+
+end
