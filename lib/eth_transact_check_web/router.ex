@@ -16,7 +16,7 @@ defmodule EthTransactCheckWeb.Router do
   scope "/", EthTransactCheckWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", TransactionController, :index
     get "/transactions", TransactionController, :index
     get "/transactions/new", TransactionController, :new
     get "/transactions/:id", TransactionController, :show

@@ -4,9 +4,8 @@
   <thead>
     <tr>
       <th>Hash</th>
-      <th>Block number</th>
       <th>Status</th>
-      <th>Is complete</th>
+      <th>Complete</th>
 
       <th></th>
     </tr>
@@ -15,9 +14,8 @@
 <%= for transaction <- @transactions do %>
     <tr>
       <td><%= transaction.hash %></td>
-      <td><%= transaction.block_number %></td>
-      <td><%= transaction.status %></td>
-      <td><%= transaction.is_complete %></td>
+      <td><span class="<%= if transaction.status, do: "green", else: "red" %>"><%= if transaction.status, do: "valid", else: "pending" %></span></td>
+      <td><span class="<%= if transaction.is_complete, do: "green", else: "red" %>"><%= if transaction.is_complete, do: "valid", else: "pending" %></span></td>
 
       <td>
         <span><%= link "Show", to: Routes.transaction_path(@conn, :show, transaction) %></span>
