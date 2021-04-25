@@ -16,6 +16,19 @@ config :eth_transact_check, EthTransactCheckWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :eth_transact_check, EthTransactCheck.Scheduler,
+  schedule: "* * * * *",
+  overlap: false,
+  timezone: :utc,
+  jobs: [
+    validate_transactions: [
+      task: {EthTransactCheck.Scheduler, :validate_transactions, []},
+    ],
+    validate_transaction_completion: [
+      task: {EthTransactCheck.Scheduler, :validate_transaction_completion, []},
+    ]
+  ]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

@@ -18,11 +18,11 @@ defmodule EthTransactCheck.EthRequestsTest do
       assert {:error, _error_message} = EthRequests.eth_get_transaction_receipt(@invalid_hash)
     end
 
-    test "eth_get_transaction_details/1 returns transaction receipt details" do
+    test "eth_get_transaction_receipt_details/1 returns transaction receipt details" do
       Process.sleep(1000)
-      assert {:ok, %{status: true, block_number: 12286310}} = EthRequests.eth_get_transaction_details(@valid_hash)
-      assert {:ok, %{status: false, block_number: 9496599}} = EthRequests.eth_get_transaction_details(@status_false_hash)
-      assert {:error, _error_message} = EthRequests.eth_get_transaction_receipt(@invalid_hash)
+      assert {:ok, %{status: true, block_number: 12286310}} = EthRequests.eth_get_transaction_receipt_details(@valid_hash)
+      assert {:ok, %{status: false, block_number: 9496599}} = EthRequests.eth_get_transaction_receipt_details(@status_false_hash)
+      assert {:error, _error_message} = EthRequests.eth_get_transaction_receipt_details(@invalid_hash)
     end
 
   end

@@ -1,7 +1,5 @@
 defmodule EthTransactCheck.EthRequests do
 
-  alias EthTransactCheck.EthRequestsRate
-
   @jsonrpc "2.0"
   @api_key Application.fetch_env!(:eth_transact_check, EthTransactCheck.EthRequests)[:api_key]
   @url "https://api.etherscan.io/api"
@@ -38,13 +36,23 @@ defmodule EthTransactCheck.EthRequests do
     end
   end
 
-  def eth_get_transaction_details(hash) do
+  def eth_block_number_integer do
+    eth_block_number()
+    |> case do
+      {:ok, block_number} ->
+        {:ok, parse_block_number(block_number)}
+      _ ->
+        {:error, "eth_blockNumber couldn't connect"}
+    end
+  end
+
+  def eth_get_transaction_receipt_details(hash) do
     eth_get_transaction_receipt(hash)
     |> case do
       {:ok, %{"blockNumber" => block_number, "status" => status}} ->
         {:ok, %{block_number: parse_block_number(block_number), status: receipt_status(status)}}
-      {:error, body} ->
-        {:error, body}
+      _ ->
+        {:error, "eth_get_transaction_receipt couldn't connect"}
     end
   end
 

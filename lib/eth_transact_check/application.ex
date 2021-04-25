@@ -14,9 +14,11 @@ defmodule EthTransactCheck.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: EthTransactCheck.PubSub},
       # Start the Endpoint (http/https)
-      EthTransactCheckWeb.Endpoint
+      EthTransactCheckWeb.Endpoint,
       # Start a worker by calling: EthTransactCheck.Worker.start_link(arg)
       # {EthTransactCheck.Worker, arg}
+      EthTransactCheck.EthRequestsRate,
+      EthTransactCheck.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

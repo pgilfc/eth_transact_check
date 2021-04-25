@@ -22,6 +22,24 @@ defmodule EthTransactCheck.Transactions do
   end
 
   @doc """
+  Returns the list of transactions without assigned block number.
+  """
+  def list_transactions_pending do
+    Transaction
+    |> where([t], is_nil(t.block_number))
+    |> Repo.all
+  end
+
+  @doc """
+  Returns the list of valid transactions with assigned block number and not tagged as completed.
+  """
+  def list_transactions_awaiting_completion do
+    Transaction
+    |> where([t], not is_nil(t.block_number) and t.status == true and t.is_complete == false)
+    |> Repo.all
+  end
+
+  @doc """
   Gets a single transaction.
 
   Raises `Ecto.NoResultsError` if the Transaction does not exist.
@@ -36,6 +54,11 @@ defmodule EthTransactCheck.Transactions do
 
   """
   def get_transaction!(id), do: Repo.get!(Transaction, id)
+
+  @doc """
+  Gets a single transaction by hash.
+  """
+  def get_transaction_by_hash!(hash), do: Repo.get_by!(Transaction, hash: hash)
 
   @doc """
   Creates a transaction.

@@ -74,3 +74,16 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :eth_transact_check, EthTransactCheck.Scheduler,
+  schedule: "* * * * *",
+  overlap: false,
+  timezone: :utc,
+  jobs: [
+    validate_transactions: [
+      task: {EthTransactCheck.Scheduler, :validate_transactions, []},
+    ],
+    validate_transaction_completion: [
+      task: {EthTransactCheck.Scheduler, :validate_transaction_completion, []},
+    ]
+  ]

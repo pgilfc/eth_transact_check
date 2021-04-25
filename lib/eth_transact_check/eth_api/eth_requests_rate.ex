@@ -4,7 +4,7 @@ defmodule EthTransactCheck.EthRequestsRate do
   """
   use GenServer
 
-  @calls 5
+  @calls 4
 
   def seconds, do: System.system_time(:second)
 
@@ -20,7 +20,7 @@ defmodule EthTransactCheck.EthRequestsRate do
   @doc """
   Starts registry
   """
-  def start_link do
+  def start_link(_ops) do
     GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
@@ -41,8 +41,8 @@ defmodule EthTransactCheck.EthRequestsRate do
   @doc """
   Decrease api count
   """
-  def count do
-    GenServer.cast(__MODULE__, {:count})
+  def count(function) do
+    GenServer.cast(__MODULE__, {:count, function})
     GenServer.call(__MODULE__, :read)
   end
 
@@ -50,7 +50,7 @@ defmodule EthTransactCheck.EthRequestsRate do
   ### SERVER CALLBACKS ###
 
   def init(:ok) do
-    {:ok, {seconds(), @calls}}
+    {:ok, {seconds(), @calls, nil}}
   end
 
   @doc """
@@ -63,19 +63,21 @@ defmodule EthTransactCheck.EthRequestsRate do
   @doc """
   Calculates current api state
   """
-  def handle_cast({:count}, {time, 0}) do
+  def handle_cast({:count, function}, {time, 0, _}) do
     wait_until(time + 1)
+    result = function.()
     current_time = seconds()
-    {:noreply, {current_time, @calls - 1}}
+    {:noreply, {current_time, @calls - 1, result}}
   end
 
-  def handle_cast({:count}, {time, calls}) do
+  def handle_cast({:count, function}, {time, calls, _}) do
+    result = function.()
     cond do
       time < seconds() ->
         current_time = seconds()
-        {:noreply, {current_time, @calls - 1}}
+        {:noreply, {current_time, @calls - 1, result}}
       true ->
-        {:noreply, {time, calls - 1}}
+        {:noreply, {time, calls - 1, result}}
     end
   end
 
