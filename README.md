@@ -9,12 +9,16 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+The approach applied uses etherscan api. Which implies:
 
-## Learn more
+  * There is an api rate limit. Which was managed through a GenServer.
+  * Transaction validation is not done at the user input level (only a regex validation is done), because the rate limit would burst with many users using it simultaneously. 
+  * There is a database (postgres) that stores the transactions and its state.
+  * There are two automated cron tasks running with the application. These tasks are responsible for checking the status of the transaction and if it has at least two block confirmations. 
+  * When launching the application, an api key for the etherscan api is required.
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+Future improvements:
+
+  * Using Ethereumex with a HTTP-RPC node would possibly avoid the etherscan's api rate limits (wich would possibly allow live transaction validation).
+  * Old (invalid) transaction clean up would probably be a nice improvement.
+
